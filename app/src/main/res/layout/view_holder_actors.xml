@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/width_actor"
+    android:layout_marginStart="@dimen/margin_card_medium_2"
+    android:layout_height="@dimen/height_actors"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivBestActors"
+        app:srcCompat="@drawable/placeholder_actor"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/gradient_actor" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        app:srcCompat="@drawable/ic_round_favorite_white_24"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/margin_medium"
+        app:tint="@color/colorAccent"
+        android:layout_marginEnd="@dimen/margin_card_medium_2"
+        android:layout_width="@dimen/margin_large"
+        android:layout_height="@dimen/margin_large"/>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/btnLike"
+        android:layout_width="@dimen/margin_medium_2"
+        android:layout_height="@dimen/margin_medium_2"
+        android:layout_marginStart="@dimen/margin_card_medium_2"
+        app:srcCompat="@drawable/ic_round_thumb_up_white_24"
+        app:tint="@color/colorAccent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/margin_medium_2"
+        />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv"
+        android:layout_alignBottom="@id/btnLike"
+        android:textSize="@dimen/text_smaller"
+        android:layout_toEndOf="@id/btnLike"
+        android:layout_marginStart="@dimen/margin_small"
+        android:textColor="@color/colorSecondaryText"
+        android:textStyle="bold"
+        android:layout_marginEnd="@dimen/margin_card_medium_2"
+        android:text="You like this movie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvActorName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/btnLike"
+        android:layout_alignStart="@id/btnLike"
+        android:layout_marginEnd="@dimen/margin_card_medium_2"
+        android:layout_marginBottom="@dimen/margin_medium"
+        android:text="Leonardo Di caprio"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
+</RelativeLayout>
