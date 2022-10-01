@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity(), BannerViewHolderDelegate, ShowCasesVie
     private lateinit var mShowCasesAdapter: ShowCasesAdapter
     lateinit var mBestPopularMovieListViewPod: MovieListViewPod
     lateinit var mMovieByGenreViewPod: MovieListViewPod
-    lateinit var mActorListViewPod:ActorListViewPod
+    lateinit var mActorListViewPod: ActorListViewPod
 
     private val movieModel: MovieModel = MovieModelImpl
 
@@ -58,27 +58,27 @@ class MainActivity : AppCompatActivity(), BannerViewHolderDelegate, ShowCasesVie
     }
 
     private fun requestData() {
-        movieModel.getNowPlayingMovies(
-            {
-                mBannerAdapter.setNewData(it)
-            }, {
-                Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()
-            }
-        )
-        movieModel.getPopularMovies(
-            {
-                mBestPopularMovieListViewPod.setData(it)
-            }, {
-                Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()
-            }
-        )
-        movieModel.getTopRatedMovies(
-            {
-                mShowCasesAdapter.setNewData(it)
-            }, {
-                Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()
-            }
-        )
+        movieModel.getNowPlayingMovies {
+            showError(it)
+        }?.observe(this) {
+            mBannerAdapter.setNewData(it)
+        }
+
+
+        movieModel.getPopularMovies {
+            showError(it)
+        }?.observe(this) {
+            mBestPopularMovieListViewPod.setData(it)
+        }
+
+
+        movieModel.getTopRatedMovies {
+            showError(it)
+        }?.observe(this) {
+            mShowCasesAdapter.setNewData(it)
+        }
+
+
         movieModel.getGenres(
             {
                 mGenres = it
@@ -181,18 +181,22 @@ class MainActivity : AppCompatActivity(), BannerViewHolderDelegate, ShowCasesVie
         return true
     }
 
-    override fun onTapMovieFromBanner(movieId:Int) {
-        startActivity(MovieDetailActivity.newIntent(this,movieId))
+    override fun onTapMovieFromBanner(movieId: Int) {
+        startActivity(MovieDetailActivity.newIntent(this, movieId))
 //        Snackbar.make(window.decorView,"Bannner $movieId",Snackbar.LENGTH_LONG).show()
     }
 
-    override fun onTapMovieFromShowCases(movieId:Int) {
-        startActivity(MovieDetailActivity.newIntent(this,movieId))
+    override fun onTapMovieFromShowCases(movieId: Int) {
+        startActivity(MovieDetailActivity.newIntent(this, movieId))
 //        Snackbar.make(window.decorView,"ShowCases $movieId",Snackbar.LENGTH_LONG).show()
     }
 
-    override fun onTapMovie(movieId:Int) {
-        startActivity(MovieDetailActivity.newIntent(this,movieId))
+    override fun onTapMovie(movieId: Int) {
+        startActivity(MovieDetailActivity.newIntent(this, movieId))
 //        Snackbar.make(window.decorView,"Best Popular movie or movie by genre $movieId",Snackbar.LENGTH_LONG).show()
+    }
+
+    private fun showError(message: String) {
+        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
     }
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Message
 import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
@@ -47,13 +48,15 @@ class MovieDetailActivity : AppCompatActivity() {
     }
 
     private fun requestData(movieId: Int) {
-        mMovieModel.getMovieDetail(movieId.toString(),
-            {
-                bindData(it)
-            },
-            {
-                Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()
-            })
+        mMovieModel.getMovieDetail(
+            movieId=movieId.toString(),
+            onFailure={
+                showError(it)
+            }
+        )?.observe(this){
+            bindData(it)
+        }
+
         mMovieModel.getCreditByMovie(
             movieId.toString(),
             {
@@ -61,7 +64,7 @@ class MovieDetailActivity : AppCompatActivity() {
                 creatorViewPod.setNewData(it.second)
             },
             {
-
+                showError(it)
             })
     }
 
@@ -100,7 +103,7 @@ class MovieDetailActivity : AppCompatActivity() {
 
         bindGenres(movieVO, movieVO.genres ?: listOf())
 
-        toolBar.title=movieVO.title ?: ""
+        toolBar.title = movieVO.title ?: ""
         tvOverView.text = movieVO.overview ?: ""
         tvOriginalTitle.text = movieVO.title ?: ""
         tvType.text = movieVO.getGenresAsCommaSeparatedString()
@@ -122,5 +125,9 @@ class MovieDetailActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun showError(message: String) {
+        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
     }
 }
