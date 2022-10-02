@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.stone.movieapp.data.vos.ActorVO
 import com.stone.movieapp.data.vos.GenreVO
 import com.stone.movieapp.data.vos.MovieVO
+import io.reactivex.rxjava3.core.Observable
 
 interface MovieModel {
     fun getNowPlayingMovies(
@@ -37,4 +38,5 @@ interface MovieModel {
         onSuccess: (Pair<List<ActorVO>,List<ActorVO>>) -> Unit,
         onFailure: (String) -> Unit
     )
+    fun searchMovie(query:String): Observable<List<MovieVO>>
 }

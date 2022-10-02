@@ -5,6 +5,8 @@ import com.stone.movieapp.data.vos.*
 import com.stone.movieapp.network.dataagents.MovieDataAgent
 import com.stone.movieapp.network.dataagents.RetrofitDataAgentImpl
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.Observables
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 object MovieModelImpl : BaseModel(),MovieModel {
@@ -192,4 +194,17 @@ object MovieModelImpl : BaseModel(),MovieModel {
             })
 //        mMovieApi.getCreditByMovie(movieId, onSuccess, onFailure)
     }
+
+    override fun searchMovie(
+        query: String
+    ): Observable<List<MovieVO>> {
+       return mMovieApi.searchMovie(query = query)
+            .map { it.results ?: listOf() }
+            .onErrorResumeNext { Observable.just(listOf()) }
+            .subscribeOn(Schedulers.io())
+
+    }
+
+
+
 }

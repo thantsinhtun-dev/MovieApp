@@ -29,7 +29,14 @@
         <entry key="..\:/PADC/TheMovieApp/app/src/main/res/layout/view_item_banner.xml" value="0.17552083333333332" />
         <entry key="..\:/PADC/TheMovieApp/app/src/main/res/layout/view_pod_actor_list.xml" value="0.17552083333333332" />
         <entry key="..\:/PADC/TheMovieApp/app/src/main/res/layout/view_pod_movies_list.xml" value="0.17552083333333332" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.16893115942028986" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.24976612035778986" />
+        <entry key="app/src/main/res/layout/activity_search_movie.xml" value="0.2776268115942029" />
+        <entry key="app/src/main/res/layout/view_holder_movie.xml" value="0.2776268115942029" />
+        <entry key="app/src/main/res/layout/view_holder_show_cases.xml" value="0.2776268115942029" />
+        <entry key="app/src/main/res/layout/view_item_banner.xml" value="0.2776268115942029" />
+        <entry key="app/src/main/res/layout/view_pod_actor_list.xml" value="0.2776268115942029" />
+        <entry key="app/src/main/res/layout/view_pod_movies_list.xml" value="0.2776268115942029" />
+        <entry key="app/src/main/res/menu/menu_discover.xml" value="0.37552083333333336" />
       </map>
     </option>
   </component>
