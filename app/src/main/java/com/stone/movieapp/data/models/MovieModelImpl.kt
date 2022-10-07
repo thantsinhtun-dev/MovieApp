@@ -150,7 +150,7 @@ object MovieModelImpl : BaseModel(),MovieModel {
     override fun getMovieDetail(
         movieId: String,
         onFailure: (String) -> Unit
-    ): LiveData<MovieVO>? {
+    ): LiveData<MovieVO?>? {
 
         mMovieApi.getMovieDetail(movieId = movieId)
             .subscribeOn(Schedulers.io())

@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
@@ -19,6 +20,7 @@ import com.stone.movieapp.delegate.BannerViewHolderDelegate
 import com.stone.movieapp.delegate.MovieViewHolderDelegate
 import com.stone.movieapp.delegate.ShowCasesViewHolderDelegate
 import com.stone.movieapp.dummy.dummyGenreList
+import com.stone.movieapp.mvvm.MainViewModel
 import com.stone.movieapp.network.dataagents.MovieDataAgentImpl
 import com.stone.movieapp.network.dataagents.OkhttpDataAgentImpl
 import com.stone.movieapp.network.dataagents.RetrofitDataAgentImpl
@@ -34,14 +36,17 @@ class MainActivity : AppCompatActivity(), BannerViewHolderDelegate, ShowCasesVie
     lateinit var mMovieByGenreViewPod: MovieListViewPod
     lateinit var mActorListViewPod: ActorListViewPod
 
-    private val movieModel: MovieModel = MovieModelImpl
+//    private val movieModel: MovieModel = MovieModelImpl
 
     private var mGenres: List<GenreVO>? = null
+
+    private lateinit var mViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setUpViewModel()
         //App Bar leading Icon
         setUpToolBar()
         setUpViewPod()
@@ -54,11 +59,27 @@ class MainActivity : AppCompatActivity(), BannerViewHolderDelegate, ShowCasesVie
 //        OkhttpDataAgentImpl().getNowPlayingMovies()
 //        RetrofitDataAgentImpl().getNowPlayingMovies()
 
-        requestData()
+//        requestData()
+        observeLiveData()
 
     }
 
-    private fun requestData() {
+    private fun observeLiveData() {
+        mViewModel.nowPlayingMovieLiveData?.observe(this,mBannerAdapter::setNewData)
+        mViewModel.popularMoviesLiveData?.observe(this,mBestPopularMovieListViewPod::setData)
+        mViewModel.topRatedMoviesLiveData?.observe(this,mShowCasesAdapter::setNewData)
+        mViewModel.genresLiveData.observe(this,this::setUpGenreTapLayout)
+        mViewModel.moviesByGenreLiveData.observe(this,mMovieByGenreViewPod::setData)
+        mViewModel.actorsLiveData.observe(this,mActorListViewPod::setNewData)
+        mViewModel.mErrorLiveData.observe(this,this::showError)
+    }
+
+    private fun setUpViewModel() {
+        mViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        mViewModel.getInitializeData()
+    }
+
+  /*  private fun requestData() {
         movieModel.getNowPlayingMovies {
             showError(it)
         }?.observe(this) {
@@ -100,20 +121,20 @@ class MainActivity : AppCompatActivity(), BannerViewHolderDelegate, ShowCasesVie
             }
         )
 
-    }
+    }*/
 
-    private fun getMovieByGenreId(genreId: Int) {
-        movieModel.getMoviesByGenreId(
-            genreId = genreId.toString(),
-            {
-                mMovieByGenreViewPod.setData(it)
-            },
-            {
-                Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()
-
-            }
-        )
-    }
+//    private fun getMovieByGenreId(genreId: Int) {
+//        movieModel.getMoviesByGenreId(
+//            genreId = genreId.toString(),
+//            {
+//                mMovieByGenreViewPod.setData(it)
+//            },
+//            {
+//                Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()
+//
+//            }
+//        )
+//    }
 
     private fun setUpViewPod() {
         mBestPopularMovieListViewPod = vpBestPopularMovieList as MovieListViewPod
@@ -138,10 +159,13 @@ class MainActivity : AppCompatActivity(), BannerViewHolderDelegate, ShowCasesVie
     private fun setUpListener() {
         tabLayoutGenre.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                mGenres?.get(tab?.position ?: 0)?.id?.let {
-                    getMovieByGenreId(it)
-                }
+                mViewModel.getMovieByGenre(tab?.position ?: 0)
+//                mGenres?.get(tab?.position ?: 0)?.id?.let {
+//                    getMovieByGenreId(it)
+//                }
 //                Snackbar.make(window.decorView, tab?.text ?: "", Snackbar.LENGTH_LONG).show()
+
+
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {

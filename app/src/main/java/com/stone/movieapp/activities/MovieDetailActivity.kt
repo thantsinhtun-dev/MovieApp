@@ -7,12 +7,15 @@ import android.os.Bundle
 import android.os.Message
 import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.stone.movieapp.R
 import com.stone.movieapp.data.models.MovieModel
 import com.stone.movieapp.data.models.MovieModelImpl
 import com.stone.movieapp.data.vos.GenreVO
 import com.stone.movieapp.data.vos.MovieVO
+import com.stone.movieapp.mvvm.MainViewModel
+import com.stone.movieapp.mvvm.MovieDetailsViewModel
 import com.stone.movieapp.utils.IMAGE_BASE_URL
 import com.stone.movieapp.viewPods.ActorListViewPod
 import kotlinx.android.synthetic.main.activity_movie_detail.*
@@ -32,44 +35,61 @@ class MovieDetailActivity : AppCompatActivity() {
 
     lateinit var actorViewPods: ActorListViewPod
     lateinit var creatorViewPod: ActorListViewPod
-    private val mMovieModel: MovieModel = MovieModelImpl
+    private lateinit var mViewModel: MovieDetailsViewModel
+//    private val mMovieModel: MovieModel = MovieModelImpl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_detail)
+        val movieId = intent?.getIntExtra(EXTRA_MOVIE_ID, 0)
+        movieId?.let {
+//            requestData(it)
+            setUpViewModel(it)
+        }
 
         //viewpods
         setUpViewPods()
         setUpListener()
-        val movieId = intent?.getIntExtra(EXTRA_MOVIE_ID, 0)
-        movieId?.let {
-            requestData(it)
-        }
+
+        observeLiveData()
+
     }
 
-    private fun requestData(movieId: Int) {
-        mMovieModel.getMovieDetail(
-            movieId=movieId.toString(),
-            onFailure={
-                showError(it)
+    private fun observeLiveData() {
+        mViewModel.movieDetailsLiveData?.observe(this){
+            it?.let { movie ->
+                bindData(movie)
             }
-        )?.observe(this){
-            bindData(it)
         }
-
-        mMovieModel.getCreditByMovie(
-            movieId.toString(),
-            {
-                actorViewPods.setNewData(it.first)
-                creatorViewPod.setNewData(it.second)
-            },
-            {
-                showError(it)
-            })
     }
+
+    /* private fun requestData(movieId: Int) {
+         mMovieModel.getMovieDetail(
+             movieId=movieId.toString(),
+             onFailure={
+                 showError(it)
+             }
+         )?.observe(this){
+             bindData(it)
+         }
+
+         mMovieModel.getCreditByMovie(
+             movieId.toString(),
+             {
+                 actorViewPods.setNewData(it.first)
+                 creatorViewPod.setNewData(it.second)
+             },
+             {
+                 showError(it)
+             })
+     }*/
 
     private fun setUpListener() {
         btnBack.setOnClickListener { onBackPressed() }
+    }
+    private fun setUpViewModel(movieId: Int){
+        mViewModel = ViewModelProvider(this)[MovieDetailsViewModel::class.java]
+        mViewModel.getInitialData(movieId)
     }
 
     private fun setUpViewPods() {

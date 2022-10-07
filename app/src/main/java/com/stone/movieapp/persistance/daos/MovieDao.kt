@@ -22,7 +22,7 @@ interface MovieDao {
     fun deleteAllMovies()
 
     @Query("Select * from movies where id = :movieId")
-    fun getMoviesById(movieId:Int) :LiveData<MovieVO>?
+    fun getMoviesById(movieId:Int) :LiveData<MovieVO?>?
 
     @Query("Select * from movies where id = :movieId")
     fun getMoviesByIdOneTime(movieId:Int) :MovieVO?
