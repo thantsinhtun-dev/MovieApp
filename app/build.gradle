@@ -75,5 +75,9 @@ dependencies {
     implementation 'com.jakewharton.rxbinding4:rxbinding-core:4.0.0'
     implementation 'com.jakewharton.rxbinding4:rxbinding-appcompat:4.0.0'
 
+    //live data
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
+
+    //view model
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
 }
