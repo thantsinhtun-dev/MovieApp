@@ -17,6 +17,8 @@ import com.stone.movieapp.data.vos.MovieVO
 import com.stone.movieapp.mvp.presenters.MainPresenter
 import com.stone.movieapp.mvp.presenters.MainPresenterImpl
 import com.stone.movieapp.mvp.views.MainView
+import com.stone.movieapp.routers.navigateToMovieDetailsActivity
+import com.stone.movieapp.routers.navigateToMovieSearchActivity
 import com.stone.movieapp.viewPods.ActorListViewPod
 import com.stone.movieapp.viewPods.MovieListViewPod
 import kotlinx.android.synthetic.main.activity_main.*
@@ -182,7 +184,8 @@ class MainActivity : AppCompatActivity(), MainView {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item.itemId==R.id.search){
-            startActivity(SearchMovieActivity.getInstance(this))
+//            startActivity(SearchMovieActivity.getInstance(this))
+            navigateToMovieSearchActivity()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -227,7 +230,7 @@ class MainActivity : AppCompatActivity(), MainView {
     }
 
     override fun navigateToMovieDetailsScreen(movieId: Int) {
-        startActivity(MovieDetailActivity.newIntent(this,movieId))
+        navigateToMovieDetailsActivity(movieId)
     }
 
     override fun showError(errorString: String) {
